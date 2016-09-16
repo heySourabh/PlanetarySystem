@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -61,7 +63,7 @@ public class PlanetarySystem extends Application {
         primaryStage.getIcons().add(
                 //new Image(getClass().getResource("/images/icon_16x16.png").toString())
                 new Image(getClass().getResource("/images/icon_32x32.png").toString())
-        //new Image(getClass().getResource("/images/icon_64x64.png").toString()),
+        //new Image(getClass().getResource("/images/icon_64x64.png").toString())
         //new Image(getClass().getResource("/images/icon_128x128.png").toString())
         );
         primaryStage.setTitle("Planetary System");
@@ -113,7 +115,7 @@ public class PlanetarySystem extends Application {
         // Create jupiter
         Planet jupiter = new Planet("Jupiter",
                 new Image(getClass().getResourceAsStream("/images/jupiter.png")),
-                400, 0.4, 4332);
+                400, 0.41, 4332);
         planetSystem.getChildren().add(jupiter);
 
         // Create saturn
@@ -133,7 +135,7 @@ public class PlanetarySystem extends Application {
                     boolean clockwise = planet.getName().equals("Venus") ? true : false;
                     setRotationTransition(planet, planet.getRotationSecs(), clockwise);
                 });
-        
+
         planetSystem.setTranslateX(200);
         planetSystem.setTranslateY(80);
         return planetSystem;
@@ -186,14 +188,20 @@ public class PlanetarySystem extends Application {
 
         ImageView icon = new ImageView(new Image("/images/icon_64x64.png"));
 
-        Text text = new Text(
-                "This is a program for displaying the Solar System.\n\n"
-                + "The images shown are not up to scale, \n"
-                + "but only a simple representation of the Solar System.\n"
-                + "The initial position of the planets is randomly initialized.");
-        text.setFont(new Font(20));
+        WebView text = new WebView();
+        text.setPrefHeight(300);
+        text.getEngine().loadContent("<H1>This is a program for displaying the Solar System in motion</H1>"
+                + "<p>The images shown are not to scale, "
+                + "but only a simple representation of the Solar System.<br>"
+                + "The initial angular location of the planets is randomly "
+                + "initialized.</p>"
+                + "<p><b>Credits:</b><br>"
+                + "Sourabh Bhat (<a href=\"mailto:heySourabh@gmail.com?Subject=Planetary%20System\">heySourabh@gmail.com</a>)<br>"
+                + "...<br>"
+                + "...<br></p>");
 
         HBox hBox = new HBox(10, icon, text);
+        hBox.setAlignment(Pos.TOP_CENTER);
 
         Button closeButton = new Button("Continue >");
         closeButton.setOnAction(e -> aboutDialog.close());
