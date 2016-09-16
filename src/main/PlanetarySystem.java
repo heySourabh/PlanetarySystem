@@ -5,14 +5,21 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -54,10 +61,14 @@ public class PlanetarySystem extends Application {
         primaryStage.getIcons().add(
                 //new Image(getClass().getResource("/images/icon_16x16.png").toString())
                 new Image(getClass().getResource("/images/icon_32x32.png").toString())
-                //new Image(getClass().getResource("/images/icon_64x64.png").toString()),
-                //new Image(getClass().getResource("/images/icon_128x128.png").toString())
+        //new Image(getClass().getResource("/images/icon_64x64.png").toString()),
+        //new Image(getClass().getResource("/images/icon_128x128.png").toString())
         );
         primaryStage.setTitle("Planetary System");
+        primaryStage.setMaximized(true);
+
+        showAboutAndWait();
+
         primaryStage.show();
     }
 
@@ -122,6 +133,7 @@ public class PlanetarySystem extends Application {
                     boolean clockwise = planet.getName().equals("Venus") ? true : false;
                     setRotationTransition(planet, planet.getRotationSecs(), clockwise);
                 });
+        
         planetSystem.setTranslateX(200);
         planetSystem.setTranslateY(80);
         return planetSystem;
@@ -164,5 +176,31 @@ public class PlanetarySystem extends Application {
                             - planet.getImage().getHeight() / 2
                             + planet.getRadiusOfRev() * Math.sin(planet.currentAngleRadians));
                 });
+    }
+
+    private void showAboutAndWait() {
+        Stage aboutDialog = new Stage(StageStyle.UTILITY);
+        aboutDialog.setAlwaysOnTop(true);
+        aboutDialog.setResizable(false);
+        aboutDialog.setTitle("About");
+
+        ImageView icon = new ImageView(new Image("/images/icon_64x64.png"));
+
+        Text text = new Text(
+                "This is a program for displaying the Solar System.\n\n"
+                + "The images shown are not up to scale, \n"
+                + "but only a simple representation of the Solar System.\n"
+                + "The initial position of the planets is randomly initialized.");
+        text.setFont(new Font(20));
+
+        HBox hBox = new HBox(10, icon, text);
+
+        Button closeButton = new Button("Continue >");
+        closeButton.setOnAction(e -> aboutDialog.close());
+        VBox vBox = new VBox(20, hBox, closeButton);
+        vBox.setAlignment(Pos.BOTTOM_RIGHT);
+        vBox.setPadding(new Insets(20));
+        aboutDialog.setScene(new Scene(vBox));
+        aboutDialog.showAndWait();
     }
 }
